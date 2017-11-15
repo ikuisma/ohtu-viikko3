@@ -1,7 +1,9 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "2.0.1"
+}
+
 apply plugin: 'java'
 apply plugin: 'application'
-
-mainClassName = 'ohtu.Main'
 
 repositories {
     mavenCentral()
@@ -17,3 +19,5 @@ jar {
         attributes 'Main-Class': 'ohtu.Main'
     }
 }
+
+mainClassName = 'ohtu.Main'
