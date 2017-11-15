@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Submission {
+
     private int week;
     private int hours;
     private List<Integer> exercises;
-
 
     public void setWeek(int week) {
         this.week = week;
