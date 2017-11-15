@@ -5,23 +5,26 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.apache.http.client.fluent.Request;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         // vaihda oma opiskelijanumerosi seuraavaan, ÄLÄ kuitenkaan laita githubiin omaa opiskelijanumeroasi
-        String studentNr = "014028638";
+        String studentNr = "";
         if ( args.length>0) {
             studentNr = args[0];
         }
 
         String urlSubmission = "https://studies.cs.helsinki.fi/ohtustats/students/"+studentNr+"/submissions";
         String urlCourse = "https://studies.cs.helsinki.fi/ohtustats/courseinfo";
+        String urlStats = "https://studies.cs.helsinki.fi/ohtustats/stats";
 
         String bodyText = Request.Get(urlSubmission).execute().returnContent().asString();
         String courseText = Request.Get(urlCourse).execute().returnContent().asString();
+        String statsText = Request.Get(urlStats).execute().returnContent().asString();
 
         Gson mapper = new Gson();
         Submission[] subs = mapper.fromJson(bodyText, Submission[].class);
@@ -46,7 +49,15 @@ public class Main {
         int tunteja = Arrays.stream(subs).map(e -> e.getHours()).reduce(0, Integer::sum);
 
         System.out.println();
-        System.out.println("Yhteensä: " + tehtäviä + " tehtävää " + tunteja + " tuntia");
+        System.out.println("Yhteensä: " + tehtäviä + " tehtävää " + tunteja + " tuntia \n");
+
+        JsonParser parser = new JsonParser();
+        JsonObject parsedStats = parser.parse(statsText).getAsJsonObject();
+        List<JsonObject> stats = parsedStats.entrySet().stream().map(e -> e.getValue().getAsJsonObject()).collect(Collectors.toList());
+
+        int handins = stats.stream().map(e -> e.get("students").getAsInt()).reduce(0, Integer::sum);
+        int returnedExercises = stats.stream().map(e -> e.get("exercise_total").getAsInt()).reduce(0, Integer::sum);
+        System.out.println("kurssilla yhteensä " + handins + " palautusta, palautettuja tehtäviä " + returnedExercises + " kpl");
     }
 
 }
@@ -81,4 +92,3 @@ class CourseData {
         this.term = term;
     }
 }
-
