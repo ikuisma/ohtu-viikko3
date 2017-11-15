@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                   http://www.springframework.org/schema/context
+                   http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                   http://www.springframework.org/schema/context
+                   http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <bean id="consoleIo" class="ohtu.io.ConsoleIO"></bean>
+    <bean id="inMemoryUserDao" class="ohtu.data_access.InMemoryUserDao"></bean>
+    <bean id="authenticationService" class="ohtu.services.AuthenticationService">
+        <constructor-arg ref="inMemoryUserDao" />
+    </bean>
+    <bean id="app" class="ohtu.App">
+        <constructor-arg ref="consoleIo"></constructor-arg>
+        <constructor-arg ref="authenticationService"></constructor-arg>
+    </bean>
+
+    <context:annotation-config />
+    <context:component-scan base-package="ohtu" />
+
+</beans>
