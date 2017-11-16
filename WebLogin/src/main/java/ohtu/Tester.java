@@ -16,8 +16,19 @@ public class Tester {
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         driver.get("http://localhost:4567");
-        successfulLogin(driver);
+        wrongPassword(driver);
         driver.quit();
+    }
+
+    private static void wrongPassword(WebDriver driver) {
+        FrontPage frontPage = new FrontPage(driver);
+        LoginPage loginPage = new LoginPage(driver);
+        frontPage.clickLogin();
+        sleep(2);
+        loginPage.inputUsername("pekka");
+        loginPage.inputPassword("akkep123");
+        loginPage.submitLogin();
+        sleep(2);
     }
 
     private static void successfulLogin(WebDriver driver) {
@@ -49,7 +60,6 @@ class FrontPage {
     }
 
     public void clickLogin() {
-        System.out.println("CLICKING LOGIN");
         WebElement element = driver.findElement(By.linkText("login"));
         element.click();
     }
@@ -71,7 +81,7 @@ class LoginPage {
 
     public void inputPassword(String text) {
         WebElement element = driver.findElement(By.name("password"));
-        element.sendKeys("akkep");
+        element.sendKeys(text);
     }
 
     public void submitLogin() {
