@@ -16,8 +16,19 @@ public class Tester {
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         driver.get("http://localhost:4567");
-        wrongPassword(driver);
+        loginWithNonExistingUser(driver);
         driver.quit();
+    }
+
+    private static void loginWithNonExistingUser(WebDriver driver) {
+        FrontPage frontPage = new FrontPage(driver);
+        LoginPage loginPage = new LoginPage(driver);
+        frontPage.clickLogin();
+        sleep(2);
+        loginPage.inputPassword("password1");
+        loginPage.inputUsername("paavo");
+        loginPage.submitLogin();
+        sleep(2);
     }
 
     private static void wrongPassword(WebDriver driver) {
