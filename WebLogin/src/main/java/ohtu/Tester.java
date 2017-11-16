@@ -16,8 +16,19 @@ public class Tester {
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         driver.get("http://localhost:4567");
-        createNewUser(driver);
+        createNewUserAndLogout(driver);
         driver.quit();
+    }
+
+    private static void createNewUserAndLogout(WebDriver driver) {
+        MainPage mainPage = new MainPage(driver);
+        FirstTimeLoginPage firstTimeLoginPage = new FirstTimeLoginPage(driver);
+        createNewUser(driver);
+        sleep(2);
+        firstTimeLoginPage.clickContinueToMainPage();
+        sleep(2);
+        mainPage.clickLogout();
+        sleep(2);
     }
 
     private static void createNewUser(WebDriver driver) {
@@ -147,4 +158,33 @@ class RegisterUserPage {
         element.submit();
     }
 
+}
+
+class FirstTimeLoginPage {
+
+    private WebDriver driver;
+
+    FirstTimeLoginPage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void clickContinueToMainPage() {
+        WebElement element = driver.findElement(By.linkText("continue to application mainpage"));
+        element.click();
+    }
+
+}
+
+class MainPage {
+
+    private WebDriver driver;
+
+    MainPage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void clickLogout() {
+        WebElement element = driver.findElement(By.linkText("logout"));
+        element.click();
+    }
 }
