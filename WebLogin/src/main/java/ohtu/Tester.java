@@ -16,8 +16,20 @@ public class Tester {
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         driver.get("http://localhost:4567");
-        loginWithNonExistingUser(driver);
+        createNewUser(driver);
         driver.quit();
+    }
+
+    private static void createNewUser(WebDriver driver) {
+        FrontPage frontPage = new FrontPage(driver);
+        RegisterUserPage registerUserPage = new RegisterUserPage(driver);
+        frontPage.clickRegisterNewUser();
+        sleep(2);
+        registerUserPage.inputUsername("paavo");
+        registerUserPage.inputPassword("password1");
+        registerUserPage.inputPasswordConfirmation("password1");
+        registerUserPage.submitRegistrationForm();
+        sleep(2);
     }
 
     private static void loginWithNonExistingUser(WebDriver driver) {
@@ -75,6 +87,11 @@ class FrontPage {
         element.click();
     }
 
+    public void clickRegisterNewUser() {
+        WebElement element = driver.findElement(By.linkText("register new user"));
+        element.click();
+    }
+
 }
 
 class LoginPage {
@@ -97,6 +114,36 @@ class LoginPage {
 
     public void submitLogin() {
         WebElement element = driver.findElement(By.name("login"));
+        element.submit();
+    }
+
+}
+
+class RegisterUserPage {
+
+    private WebDriver driver;
+
+    RegisterUserPage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void inputUsername(String text) {
+        WebElement element = driver.findElement(By.name("username"));
+        element.sendKeys(text);
+    }
+
+    public void inputPassword(String text) {
+        WebElement element = driver.findElement(By.name("password"));
+        element.sendKeys(text);
+    }
+
+    public void inputPasswordConfirmation(String text) {
+        WebElement element = driver.findElement(By.name("passwordConfirmation"));
+        element.sendKeys(text);
+    }
+
+    public void submitRegistrationForm() {
+        WebElement element = driver.findElement(By.name("signup"));
         element.submit();
     }
 
