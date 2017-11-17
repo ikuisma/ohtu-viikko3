@@ -83,8 +83,24 @@ public class Stepdefs {
     public void user_is_not_logged_in_and_error_message_is_given() throws Throwable {
         pageHasContent("invalid username or password");
         pageHasContent("Give your credentials to login");
-    }     
-    
+    }
+
+
+    @When("^a short username \"([^\"]*)\" and a valid password \"([^\"]*)\" are entered$")
+    public void a_short_username_and_a_valid_password_are_entered(String username, String password) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        registerUserPage.inputUsername(username);
+        registerUserPage.inputPassword(password);
+        registerUserPage.inputPasswordConfirmation(password);
+        registerUserPage.submitRegistrationForm();
+    }
+
+    @Then("^user is not created and error \"([^\"]*)\" is reported$")
+    public void user_is_not_created_and_error_is_reported(String errorMessage) throws Throwable {
+        assertTrue(driver.getPageSource().contains(errorMessage));
+    }
+
+
     @After
     public void tearDown(){
         driver.quit();
@@ -179,6 +195,7 @@ class RegisterUserPage {
         WebElement element = driver.findElement(By.name("signup"));
         element.submit();
     }
+
 
 }
 
