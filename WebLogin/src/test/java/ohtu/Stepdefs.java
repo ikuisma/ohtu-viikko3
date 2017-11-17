@@ -13,13 +13,36 @@ import org.openqa.selenium.WebElement;
 public class Stepdefs {
     WebDriver driver = new ChromeDriver();
     String baseUrl = "http://localhost:4567";
+    FrontPage frontPage = new FrontPage(driver);
+    RegisterUserPage registerUserPage = new RegisterUserPage(driver);
+    FirstTimeLoginPage firstTimeLoginPage = new FirstTimeLoginPage(driver);
     
     @Given("^login is selected$")
     public void login_selected() throws Throwable {
         driver.get(baseUrl);
         WebElement element = driver.findElement(By.linkText("login"));       
         element.click();          
-    } 
+    }
+
+    @Given("^command new user is selected$")
+    public void command_new_user_is_selected() throws Throwable {
+        driver.get(baseUrl);
+        frontPage.clickRegisterNewUser();
+    }
+
+    @When("^a valid username \"([^\"]*)\" and password \"([^\"]*)\" and matching password confirmation are entered$")
+    public void a_valid_username_and_password_and_matching_password_confirmation_are_entered(String username, String password) throws Throwable {
+        registerUserPage.inputUsername(username);
+        registerUserPage.inputPassword(password);
+        registerUserPage.inputPasswordConfirmation(password);
+        registerUserPage.submitRegistrationForm();
+    }
+
+    @Then("^a new user is created$")
+    public void a_new_user_is_created() throws Throwable {
+        boolean firstTimeLoginPageIsOpen = firstTimeLoginPage.continueToMainPageLink().isDisplayed();
+        assertTrue(firstTimeLoginPageIsOpen);
+    }
 
     @When("^username \"([^\"]*)\" and password \"([^\"]*)\" are given$")
     public void username_and_password_are_given(String username, String password) throws Throwable {
@@ -82,4 +105,97 @@ public class Stepdefs {
         element = driver.findElement(By.name("login"));
         element.submit();  
     } 
+}
+
+class FrontPage {
+
+    private WebDriver driver;
+
+    FrontPage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void clickLogin() {
+        WebElement element = driver.findElement(By.linkText("login"));
+        element.click();
+    }
+
+    public void clickRegisterNewUser() {
+        WebElement element = driver.findElement(By.linkText("register new user"));
+        element.click();
+    }
+
+}
+
+class LoginPage {
+
+    private WebDriver driver;
+
+    LoginPage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void inputUsername(String text) {
+        WebElement element = driver.findElement(By.name("username"));
+        element.sendKeys(text);
+    }
+
+    public void inputPassword(String text) {
+        WebElement element = driver.findElement(By.name("password"));
+        element.sendKeys(text);
+    }
+
+    public void submitLogin() {
+        WebElement element = driver.findElement(By.name("login"));
+        element.submit();
+    }
+
+}
+
+class RegisterUserPage {
+
+    private WebDriver driver;
+
+    RegisterUserPage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void inputUsername(String text) {
+        WebElement element = driver.findElement(By.name("username"));
+        element.sendKeys(text);
+    }
+
+    public void inputPassword(String text) {
+        WebElement element = driver.findElement(By.name("password"));
+        element.sendKeys(text);
+    }
+
+    public void inputPasswordConfirmation(String text) {
+        WebElement element = driver.findElement(By.name("passwordConfirmation"));
+        element.sendKeys(text);
+    }
+
+    public void submitRegistrationForm() {
+        WebElement element = driver.findElement(By.name("signup"));
+        element.submit();
+    }
+
+}
+
+class FirstTimeLoginPage {
+
+    private WebDriver driver;
+
+    FirstTimeLoginPage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void clickContinueToMainPage() {
+        continueToMainPageLink().click();
+    }
+
+    public WebElement continueToMainPageLink() {
+        return driver.findElement(By.linkText("continue to application mainpage"));
+    }
+
 }
