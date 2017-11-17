@@ -93,6 +93,13 @@ public class Stepdefs {
         registerUserPage.fillAndSubmitRegistrationForm(username, password);
     }
 
+    @When("^an already existing username \"([^\"]*)\" and a valid password \"([^\"]*)\" are entered$")
+    public void an_already_existing_username_and_a_valid_password_are_entered(String username, String password) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        registerUserPage.fillAndSubmitRegistrationForm(username, password);
+    }
+
+
     @Then("^user is not created and error \"([^\"]*)\" is reported$")
     public void user_is_not_created_and_error_is_reported(String errorMessage) throws Throwable {
         assertTrue(driver.getPageSource().contains(errorMessage));

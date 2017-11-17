@@ -15,11 +15,11 @@ Feature: A new user account can be created if a proper unused username and passw
     When  a valid username "paavo" and a password "a" that is too short are entered
     Then user is not created and error "password should have at least 8 characters" is reported
 
-  #Scenario: creation fails with already taken username and valid password
-  #  Given command new user is selected
-  #  When  ...
-  #  Then user is not created and error "username is already taken" is reported
-#
+  Scenario: creation fails with already taken username and valid password
+    Given command new user is selected
+    When  an already existing username "jukka" and a valid password "Newpassword1" are entered
+    Then user is not created and error "username is already taken" is reported
+
   #Scenario: creation fails when password and password confirmation do not match
   #  Given command new user is selected
   #  When  ...
