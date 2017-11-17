@@ -38,6 +38,10 @@ public class AuthenticationService {
             status.addError("password should have at least 8 characters");
         }
 
+        if (!password.equals(passwordConfirmation)) {
+            status.addError("password and password confirmation do not match");
+        }
+
         if (status.isOk()) {
             userDao.add(new User(username, password));
         }
