@@ -16,6 +16,7 @@ public class Stepdefs {
     FrontPage frontPage = new FrontPage(driver);
     RegisterUserPage registerUserPage = new RegisterUserPage(driver);
     FirstTimeLoginPage firstTimeLoginPage = new FirstTimeLoginPage(driver);
+    MainPage mainPage = new MainPage(driver);
     
     @Given("^login is selected$")
     public void login_selected() throws Throwable {
@@ -103,6 +104,35 @@ public class Stepdefs {
     public void a_valid_username_and_password_but_a_nonmatching_confirmation_are_entered(String username, String password, String passwordConfirmation) throws Throwable {
         registerUserPage.fillAndSubmitRegistrationForm(username, password, passwordConfirmation);
     }
+
+    @Given("^user with username \"([^\"]*)\" with password \"([^\"]*)\" is successfully created$")
+    public void user_with_username_with_password_is_successfully_created(String username, String password) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        driver.get(baseUrl);
+        frontPage.clickRegisterNewUser();
+        registerUserPage.fillAndSubmitRegistrationForm(username, password);
+        firstTimeLoginPage.clickContinueToMainPage();
+        mainPage.clickLogout();
+    }
+
+    @Given("^user with username \"([^\"]*)\" and password \"([^\"]*)\" is tried to be created$")
+    public void user_with_username_and_password_is_tried_to_be_created(String username, String password) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        driver.get(baseUrl);
+        frontPage.clickRegisterNewUser();
+        registerUserPage.fillAndSubmitRegistrationForm(username, password);
+    }
+
+    @When("^username \"([^\"]*)\" that was not created tries to login with password \"([^\"]*)\"$")
+    public void username_that_was_not_created_tries_to_login_with_password(String username, String password) throws Throwable {
+        logInWith(username, password);
+    }
+
+    @When("^created user with username \"([^\"]*)\" and password \"([^\"]*)\" logs in$")
+    public void created_user_with_username_and_password_logs_in(String username, String password) throws Throwable {
+        logInWith(username, password);
+    }
+
 
     @Then("^user is not created and error \"([^\"]*)\" is reported$")
     public void user_is_not_created_and_error_is_reported(String errorMessage) throws Throwable {
@@ -237,4 +267,18 @@ class FirstTimeLoginPage {
         return driver.findElement(By.linkText("continue to application mainpage"));
     }
 
+}
+
+class MainPage {
+
+    private WebDriver driver;
+
+    MainPage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void clickLogout() {
+        WebElement element = driver.findElement(By.linkText("logout"));
+        element.click();
+    }
 }

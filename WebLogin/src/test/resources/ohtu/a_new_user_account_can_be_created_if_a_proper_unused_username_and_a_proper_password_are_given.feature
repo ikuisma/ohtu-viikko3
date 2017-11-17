@@ -24,3 +24,15 @@ Feature: A new user account can be created if a proper unused username and passw
     Given command new user is selected
     When  a valid username "newuser" and password "Validpass1" but a nonmatching confirmation "Validpass" are entered
     Then user is not created and error "password and password confirmation do not match" is reported
+
+  Scenario: user can login with successfully generated account
+    Given user with username "lea" with password "salainen1" is successfully created
+    And   login is selected
+    When  created user with username "lea" and password "salainen1" logs in
+    Then  user is logged in
+
+  Scenario: user can not login with account that is not successfully created
+    Given user with username "aa" and password "bad" is tried to be created
+    And   login is selected
+    When  username "aa" that was not created tries to login with password "bad"
+    Then  user is not logged in and error message is given
