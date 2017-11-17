@@ -99,6 +99,10 @@ public class Stepdefs {
         registerUserPage.fillAndSubmitRegistrationForm(username, password);
     }
 
+    @When("^a valid username \"([^\"]*)\" and password \"([^\"]*)\" but a nonmatching confirmation \"([^\"]*)\" are entered$")
+    public void a_valid_username_and_password_but_a_nonmatching_confirmation_are_entered(String username, String password, String passwordConfirmation) throws Throwable {
+        registerUserPage.fillAndSubmitRegistrationForm(username, password, passwordConfirmation);
+    }
 
     @Then("^user is not created and error \"([^\"]*)\" is reported$")
     public void user_is_not_created_and_error_is_reported(String errorMessage) throws Throwable {
@@ -198,6 +202,13 @@ class RegisterUserPage {
     public void submitRegistrationForm() {
         WebElement element = driver.findElement(By.name("signup"));
         element.submit();
+    }
+
+    public void fillAndSubmitRegistrationForm(String username, String password, String passwordConfirmation) {
+        inputUsername(username);
+        inputPassword(password);
+        inputPasswordConfirmation(passwordConfirmation);
+        submitRegistrationForm();
     }
 
     public void fillAndSubmitRegistrationForm(String username, String password) {

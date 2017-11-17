@@ -20,7 +20,7 @@ Feature: A new user account can be created if a proper unused username and passw
     When  an already existing username "jukka" and a valid password "Newpassword1" are entered
     Then user is not created and error "username is already taken" is reported
 
-  #Scenario: creation fails when password and password confirmation do not match
-  #  Given command new user is selected
-  #  When  ...
-  #  Then user is not created and error "password and password confirmation do not match" is reported
+  Scenario: creation fails when password and password confirmation do not match
+    Given command new user is selected
+    When  a valid username "newuser" and password "Validpass1" but a nonmatching confirmation "Validpass" are entered
+    Then user is not created and error "password and password confirmation do not match" is reported
