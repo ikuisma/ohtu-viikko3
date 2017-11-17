@@ -32,10 +32,7 @@ public class Stepdefs {
 
     @When("^a valid username \"([^\"]*)\" and password \"([^\"]*)\" and matching password confirmation are entered$")
     public void a_valid_username_and_password_and_matching_password_confirmation_are_entered(String username, String password) throws Throwable {
-        registerUserPage.inputUsername(username);
-        registerUserPage.inputPassword(password);
-        registerUserPage.inputPasswordConfirmation(password);
-        registerUserPage.submitRegistrationForm();
+        registerUserPage.fillAndSubmitRegistrationForm(username, password);
     }
 
     @Then("^a new user is created$")
@@ -89,10 +86,7 @@ public class Stepdefs {
     @When("^a short username \"([^\"]*)\" and a valid password \"([^\"]*)\" are entered$")
     public void a_short_username_and_a_valid_password_are_entered(String username, String password) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        registerUserPage.inputUsername(username);
-        registerUserPage.inputPassword(password);
-        registerUserPage.inputPasswordConfirmation(password);
-        registerUserPage.submitRegistrationForm();
+        registerUserPage.fillAndSubmitRegistrationForm(username, password);
     }
 
     @Then("^user is not created and error \"([^\"]*)\" is reported$")
@@ -194,6 +188,13 @@ class RegisterUserPage {
     public void submitRegistrationForm() {
         WebElement element = driver.findElement(By.name("signup"));
         element.submit();
+    }
+
+    public void fillAndSubmitRegistrationForm(String username, String password) {
+        inputUsername(username);
+        inputPassword(password);
+        inputPasswordConfirmation(password);
+        submitRegistrationForm();
     }
 
 
